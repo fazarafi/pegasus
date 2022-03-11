@@ -168,15 +168,17 @@ def text_eval(encoder,
           "targets": targets,
           "predictions": preds
       }
-
+      
       for key in additional_keys:
         if key == "selected_ids":
           text_dict[key] = decode_selected_indices(decode_fn, features)
         else:
           text_dict[key] = decode_matrix(decode_fn, features[key])
-
+      logging.info(("[FT DEBUG] text_dict: "+str(i)+" target: " + str(text_dict["targets"].encode('utf-8')) +
+        "; prediction: "+str(text_dict["predictions"].encode('utf-8'))))
+      print("\n")
       log_writer.write(text_dict, i)
-
+      
       for key, scorer in scorers_dict.items():
         scores_i = scorer.score(targets, preds)
         aggregators_dict[key].add_scores(scores_i)
